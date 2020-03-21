@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
+
+    <title>New entry</title>
+
+    <script>
+        const baseUrl = '{{ baseUrl }}';
+
+        function formLess() {
+            const link = document.location.hash.substr(1);
+            if (link) {
+                document.getElementById("forum").style.display = "none";
+                document.getElementById("result").style.display = "none";
+
+                const urlParams = new URLSearchParams(window.location.search);
+                let author = urlParams.get('author');
+                if (author === "")
+                    author = null;
+                let short = urlParams.get('short');
+                if (short === "")
+                    short = null;
+                sendData(author, link, short);
+                document.getElementById("result").style.display = "block";
+            }
+        }
+
+        window.addEventListener("load", formLess);
+        window.addEventListener("hashchange", formLess);
+
+        function sendRequest() {
+            let author, url;
+            document.getElementById("result").style.display = "none";
+            author = document.getElementById("author").value;
+            if (author === "")
+                author = null;
+            url = document.getElementById("url").value;
+            sendData(author, url);
+            document.getElementById("result").style.display = "block";
+        }
+
+        function sendData(author, url, short=null) {
+            fetch(baseUrl + "api/new", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({author: author, url: url, short: short})
+            }).then(res => {
+                    if (res.status === 400) {
+                        document.getElementById("result").innerHTML = `<strong>${url}</strong> is not a valid address`;
+                        return;
+                    } else if (res.status === 401) {
+                        document.getElementById("result").innerHTML = `<strong>${short}</strong> is already in use`;
+                        return
+                    }
+                    res.json().then(data => {
+                        document.getElementById("result").innerHTML = `<a href="${baseUrl}${data.id}">${baseUrl}${data.id}</a> now leads to <br/><a href="${url}">${url}</a>`;
+                    });
+                }
+            );
+        }
+    </script>
+    <style>
+        form, p {
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        a {
+            font-family: 'Ubuntu Mono', monospace;
+        }
+    </style>
+</head>
+<body>
+
+<form action="" onsubmit="sendRequest();return false" id="forum">
+    <label for="author">author:</label><br>
+    <input type="text" id="author" name="author"><br>
+    <label for="url">Url:
+    </label><br>
+    <input type="url" id="url" name="url" required> <br> <br>
+    <input type="submit" value="Submit"/>
+</form>
+
+<p id="result" style="display: none;">loading...</p>
+</body>
+</html>
