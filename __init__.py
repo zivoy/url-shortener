@@ -71,14 +71,13 @@ def get_id(url, curr):
     short = base64.urlsafe_b64encode(str(num).encode()).decode()
     if not exists(short, curr):
         return short
-    elif get(short, curr) == url:
+    if get(short, curr) == url:
         return short
-    else:
-        while True:
-            num = random.randint(1000, 999999)
-            short = base64.urlsafe_b64encode(str(num).encode()).decode()
-            if not exists(short, curr):
-                return short
+    while True:
+        num = random.randint(1000, 999999)
+        short = base64.urlsafe_b64encode(str(num).encode()).decode()
+        if not exists(short, curr):
+            return short
 
 
 def get_table(curr: psycopg2.extensions.cursor, author: str = None):
@@ -129,6 +128,10 @@ def add_new():
 
     if "short" in request.json and request.json["short"] is not None:
         short = request.json["short"]
+        if short in ["new", "list"]:
+            curr.close()
+            connection.close()
+            abort(401)
     else:
         short = get_id(url, curr)
 

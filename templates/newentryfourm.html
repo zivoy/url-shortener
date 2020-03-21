@@ -53,7 +53,7 @@
                         document.getElementById("result").innerHTML = `<strong>${url}</strong> is not a valid address`;
                         return;
                     } else if (res.status === 401) {
-                        document.getElementById("result").innerHTML = `<strong>${short}</strong> is already in use`;
+                        document.getElementById("result").innerHTML = `<strong>${short}</strong> is unavailable`;
                         return
                     }
                     res.json().then(data => {

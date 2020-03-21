@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file:$PROJECT_DIR$/../../..//$PROJECT_DIR$/.idea/shortner.iml" filepath="$PROJECT_DIR$/.idea/shortner.iml" />
+      <module fileurl="file://file:C:/Users//C:/Users/zivno/PycharmProjects/url-shortener/.idea/shortner.iml" filepath="file:$PROJECT_DIR$/../../..//C:/Users/zivno/PycharmProjects/url-shortener/.idea/shortner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/url-shortener.iml" filepath="$PROJECT_DIR$/.idea/url-shortener.iml" />
     </modules>
   </component>
 </project>
