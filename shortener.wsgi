@@ -1,8 +1,10 @@
 #!/usr/bin/python
-from shortener import app
-import sys
 import os
-sys.path.insert(0,"/home/zivy/shortner/")
+import sys
+
+sys.path.insert(0, "/home/zivy/shortner/")
+
+from shortener import app
 
 
 def application(req_environ, start_response):
