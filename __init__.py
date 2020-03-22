@@ -13,9 +13,9 @@ from flask_github import GitHub
 from requests.exceptions import Timeout
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FlaskDevKey")
+app.secret_key = os.environ.get("FlaskDevKey")
 app.config['GITHUB_CLIENT_ID'] = "76649f9c931b9cd7d396"
-app.config['GITHUB_CLIENT_SECRET'] = os.getenv("GithubClientSecret")
+app.config['GITHUB_CLIENT_SECRET'] = os.environ.get("GithubClientSecret")
 
 address = "localhost"  # "192.168.86.30"
 
