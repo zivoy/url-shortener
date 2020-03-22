@@ -8,6 +8,7 @@
 
     <script>
         const baseUrl = '{{ baseUrl }}';
+        const author = '{{ author }}';
 
         function formLess() {
             const link = document.location.hash.substr(1);
@@ -16,12 +17,12 @@
                 document.getElementById("result").style.display = "none";
 
                 const urlParams = new URLSearchParams(window.location.search);
-                let author = urlParams.get('author');
-                if (author === "")
-                    author = null;
-                let short = urlParams.get('short');
-                if (short === "")
-                    short = null;
+                let short;
+                {% if authority_level >= 2 %}
+                    short = urlParams.get('short');
+                    if (short === "")
+                        short = null;
+                {% endif %}
                 sendData(author, link, short);
                 document.getElementById("result").style.display = "block";
             }
@@ -31,17 +32,19 @@
         window.addEventListener("hashchange", formLess);
 
         function sendRequest() {
-            let author, url;
+            let short, url;
             document.getElementById("result").style.display = "none";
-            author = document.getElementById("author").value;
-            if (author === "")
-                author = null;
+            {% if authority_level >= 2 %}
+                short = document.getElementById("short").value;
+                if (short === "")
+                    short = null;
+            {% endif %}
             url = document.getElementById("url").value;
-            sendData(author, url);
+            sendData(author, url, short);
             document.getElementById("result").style.display = "block";
         }
 
-        function sendData(author, url, short=null) {
+        function sendData(author, url, short = null) {
             fetch(baseUrl + "api/new", {
                 method: "POST",
                 headers: {
@@ -76,9 +79,11 @@
 <body>
 
 <form action="" onsubmit="sendRequest();return false" id="forum">
-    <label for="author">author:</label><br>
-    <input type="text" id="author" name="author"><br>
-    <label for="url">Url:
+    {% if authority_level >= 2 %}
+        <label for="short">Custom Short ID (optional):</label><br>
+        <input type="text" id="short" name="short"><br>
+    {% endif %}
+    <label for="url">URL:
     </label><br>
     <input type="url" id="url" name="url" required> <br> <br>
     <input type="submit" value="Submit"/>
